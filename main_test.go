@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -8,39 +9,41 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestDefaultHandler(t *testing.T) {
+type urlTest struct {
+	url      string
+	code     int
+	body     string
+	location string
+}
+
+var tests = []urlTest{
+	// Websites
+	{"https://web.ons.gov.uk/", redir, "", landingPage},
+	{"https://web.ons.gov.uk/a/b/c", redir, "", landingPage},
+	{"https://web.ons.gov.uk/ons/apiservice/web/", redir, "", landingPage},
+	// APIs
+	{"https://neighbourhood.statistics.gov.uk/NDE2/a/b/c", 400, apiResponse, ""},
+	{"https://web.ons.gov.uk/ons/apiservice/a/b/c", 400, apiResponse, ""},
+	{"https://web.ons.gov.uk/ons/api/a/b/c", 400, apiResponse, ""},
+	// Visualisations
+	{"https://neighbourhood.statistics.gov.uk/HTMLDocs/a/b/c", redir, "", "https://www.ons.gov.uk/visualisations/nesscontent/a/b/c"},
+	{"https://www.neighbourhood.statistics.gov.uk/HTMLDocs/a/b/c", redir, "", "https://www.ons.gov.uk/visualisations/nesscontent/a/b/c"},
+}
+
+func TestRedirects(t *testing.T) {
 	router := getRouter()
 
-	Convey("Default handler should redirect to landing page", t, func() {
-		w := httptest.NewRecorder()
-		req, err := http.NewRequest("GET", "https://web.ons.gov.uk/a/b/c", nil)
-		So(err, ShouldBeNil)
+	for _, test := range tests {
+		Convey(fmt.Sprintf("%s", test.url), t, func() {
+			w := httptest.NewRecorder()
+			req, err := http.NewRequest("GET", test.url, nil)
+			So(err, ShouldBeNil)
 
-		router.ServeHTTP(w, req)
+			router.ServeHTTP(w, req)
 
-		So(w.Code, ShouldEqual, redir)
-		So(w.Header().Get("Location"), ShouldEqual, landingPage)
-	})
-
-	Convey("Data vis handler should redirect to /visualisations/nesscontent", t, func() {
-		w := httptest.NewRecorder()
-		req, err := http.NewRequest("GET", "https://neighbourhood.statistics.gov.uk/HTMLDocs/a/b/c", nil)
-		So(err, ShouldBeNil)
-
-		router.ServeHTTP(w, req)
-
-		So(w.Code, ShouldEqual, redir)
-		So(w.Header().Get("Location"), ShouldEqual, "https://www.ons.gov.uk/visualisations/nesscontent/a/b/c")
-	})
-
-	Convey("NeSS API handler should redirect to /help/localstatistics", t, func() {
-		w := httptest.NewRecorder()
-		req, err := http.NewRequest("GET", "https://neighbourhood.statistics.gov.uk/NDE2/a/b/c", nil)
-		So(err, ShouldBeNil)
-
-		router.ServeHTTP(w, req)
-
-		So(w.Code, ShouldEqual, http.StatusBadRequest)
-		So(w.Body.String(), ShouldEqual, `This service has been retired. Please visit https://www.ons.gov.uk/help/localstatistics for more information.`)
-	})
+			So(w.Code, ShouldEqual, test.code)
+			So(w.Header().Get("Location"), ShouldEqual, test.location)
+			So(w.Body.String(), ShouldEqual, test.body)
+		})
+	}
 }
