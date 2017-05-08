@@ -71,6 +71,6 @@ func dataVisHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func apiHandler(w http.ResponseWriter, req *http.Request) {
-	w.WriteHeader(400)
+	w.WriteHeader(410)
 	w.Write([]byte(apiResponse))
 }

@@ -1,4 +1,4 @@
-FROM scratch
+FROM alpine
 
 ADD ca-certificates.crt /etc/ssl/certs/
 ADD build/dp-ness-wda-redirector dp-ness-wda-redirector
