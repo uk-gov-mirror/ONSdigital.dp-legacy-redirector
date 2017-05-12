@@ -22,9 +22,10 @@ var tests = []urlTest{
 	{"https://web.ons.gov.uk/a/b/c", redir, "", landingPage},
 	{"https://web.ons.gov.uk/ons/apiservice/web/", redir, "", landingPage},
 	// APIs
-	{"https://neighbourhood.statistics.gov.uk/NDE2/a/b/c", 400, apiResponse, ""},
-	{"https://web.ons.gov.uk/ons/apiservice/a/b/c", 400, apiResponse, ""},
-	{"https://web.ons.gov.uk/ons/api/a/b/c", 400, apiResponse, ""},
+	{"https://neighbourhood.statistics.gov.uk/NDE2/a/b/c", 410, apiResponse, ""},
+	{"https://web.ons.gov.uk/ons/apiservice/a/b/c", 410, apiResponse, ""},
+	{"https://web.ons.gov.uk/ons/api/a/b/c", 410, apiResponse, ""},
+	{"https://data.ons.gov.uk/ons/api/a/b/c", 410, apiResponse, ""},
 	// Visualisations
 	{"https://neighbourhood.statistics.gov.uk/HTMLDocs/a/b/c", redir, "", "https://www.ons.gov.uk/visualisations/nesscontent/a/b/c"},
 	{"https://www.neighbourhood.statistics.gov.uk/HTMLDocs/a/b/c", redir, "", "https://www.ons.gov.uk/visualisations/nesscontent/a/b/c"},

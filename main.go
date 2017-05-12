@@ -43,6 +43,7 @@ func getRouter() *mux.Router {
 	// WDA API
 	router.Host("web.ons.gov.uk").Path("/ons/apiservice/{uri:.*}").HandlerFunc(apiHandler)
 	router.Host("web.ons.gov.uk").Path("/ons/api/{uri:.*}").HandlerFunc(apiHandler)
+	router.Host("data.ons.gov.uk").Path("/{uri:.*}").HandlerFunc(apiHandler)
 	// Catch-all
 	router.Path("/{uri:.*}").HandlerFunc(defaultHandler)
 

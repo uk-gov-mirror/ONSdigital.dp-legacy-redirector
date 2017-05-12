@@ -1,4 +1,4 @@
-VERSION=1.0.0
+VERSION=1.0.1
 
 build:
 	GOOS=linux GOARCH=amd64 go build -o build/dp-ness-wda-redirector .
