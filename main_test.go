@@ -29,6 +29,7 @@ var tests = []urlTest{
 	// Visualisations
 	{"https://neighbourhood.statistics.gov.uk/HTMLDocs/a/b/c", redir, "", "https://www.ons.gov.uk/visualisations/nesscontent/a/b/c"},
 	{"https://www.neighbourhood.statistics.gov.uk/HTMLDocs/a/b/c", redir, "", "https://www.ons.gov.uk/visualisations/nesscontent/a/b/c"},
+	{"https://visual.ons.gov.uk/a/b/c", 410, "FIXME", ""},
 }
 
 func TestRedirects(t *testing.T) {

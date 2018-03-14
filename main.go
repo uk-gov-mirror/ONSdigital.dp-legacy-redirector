@@ -14,8 +14,9 @@ var landingPage = "https://www.ons.gov.uk/help/localstatistics"
 var apiResponse = "This service is no longer available. Please visit https://www.ons.gov.uk/help/localstatistics for more information."
 
 func main() {
-	bindAddr := ":8080"
+	log.Namespace = "dp-legacy-redirector"
 
+	bindAddr := ":8080"
 	if v := os.Getenv("BIND_ADDR"); len(v) > 0 {
 		bindAddr = v
 	}
@@ -44,6 +45,8 @@ func getRouter() *mux.Router {
 	router.Host("web.ons.gov.uk").Path("/ons/apiservice/{uri:.*}").HandlerFunc(apiHandler)
 	router.Host("web.ons.gov.uk").Path("/ons/api/{uri:.*}").HandlerFunc(apiHandler)
 	router.Host("data.ons.gov.uk").Path("/{uri:.*}").HandlerFunc(apiHandler)
+	// Visual.ONS
+	router.Host("visual.ons.gov.uk").Path("/{uri:.*").HandlerFunc(visualHandler)
 	// Catch-all
 	router.Path("/{uri:.*}").HandlerFunc(defaultHandler)
 
@@ -52,7 +55,7 @@ func getRouter() *mux.Router {
 
 func defaultHandler(w http.ResponseWriter, req *http.Request) {
 	log.DebugR(req, "redirecting to landing page", log.Data{
-		"host": req.URL.Host,
+		"host": req.Host,
 		"path": req.URL.Path,
 		"dest": landingPage,
 	})
@@ -63,7 +66,7 @@ func defaultHandler(w http.ResponseWriter, req *http.Request) {
 func dataVisHandler(w http.ResponseWriter, req *http.Request) {
 	dest := "https://www.ons.gov.uk/visualisations/nesscontent/" + mux.Vars(req)["uri"]
 	log.DebugR(req, "redirecting visualisation", log.Data{
-		"host": req.URL.Host,
+		"host": req.Host,
 		"path": req.URL.Path,
 		"dest": dest,
 	})
@@ -72,6 +75,19 @@ func dataVisHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func apiHandler(w http.ResponseWriter, req *http.Request) {
+	log.DebugR(req, "returning api help text", log.Data{
+		"host": req.Host,
+		"path": req.URL.Path,
+	})
 	w.WriteHeader(410)
 	w.Write([]byte(apiResponse))
+}
+
+func visualHandler(w http.ResponseWriter, req *http.Request) {
+	log.DebugR(req, "redirecting visual.ons.gov.uk", log.Data{
+		"host": req.Host,
+		"path": req.URL.Path,
+	})
+	w.WriteHeader(410)
+	w.Write([]byte("FIXME"))
 }
