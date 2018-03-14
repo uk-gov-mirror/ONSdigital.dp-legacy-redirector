@@ -46,7 +46,7 @@ func getRouter() *mux.Router {
 	router.Host("web.ons.gov.uk").Path("/ons/api/{uri:.*}").HandlerFunc(apiHandler)
 	router.Host("data.ons.gov.uk").Path("/{uri:.*}").HandlerFunc(apiHandler)
 	// Visual.ONS
-	router.Host("visual.ons.gov.uk").Path("/{uri:.*").HandlerFunc(visualHandler)
+	router.Host("visual.ons.gov.uk").Path("/{uri:.*}").HandlerFunc(visualHandler)
 	// Catch-all
 	router.Path("/{uri:.*}").HandlerFunc(defaultHandler)
 

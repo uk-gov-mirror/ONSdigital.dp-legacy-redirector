@@ -1,7 +1,8 @@
-dp-ness-wda-redirector
-======================
+dp-legacy-redirector
+====================
 
-Handles redirects for Neighbourhood Statistics and Web Data Access.
+Handles redirects for legacy ONS services including Neighbourhood Statistics, Web Data Access
+and Visual.ONS.
 
 ### Getting started
 
