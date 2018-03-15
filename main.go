@@ -12,6 +12,7 @@ import (
 var redir = http.StatusTemporaryRedirect
 var landingPage = "https://www.ons.gov.uk/help/localstatistics"
 var apiResponse = "This service is no longer available. Please visit https://www.ons.gov.uk/help/localstatistics for more information."
+var visualResponse = "The article you have requested is no longer available."
 
 func main() {
 	log.Namespace = "dp-legacy-redirector"
@@ -46,7 +47,8 @@ func getRouter() *mux.Router {
 	router.Host("web.ons.gov.uk").Path("/ons/api/{uri:.*}").HandlerFunc(apiHandler)
 	router.Host("data.ons.gov.uk").Path("/{uri:.*}").HandlerFunc(apiHandler)
 	// Visual.ONS
-	router.Host("visual.ons.gov.uk").Path("/{uri:.*}").HandlerFunc(visualHandler)
+	router.Host("visual.ons.gov.uk").Path("/wp-content/{uri:.*}").HandlerFunc(visualAssetHandler)
+	router.Host("visual.ons.gov.uk").Path("/{article:[^/]*}{uri:/?.*}").HandlerFunc(visualArticleHandler)
 	// Catch-all
 	router.Path("/{uri:.*}").HandlerFunc(defaultHandler)
 
@@ -83,11 +85,34 @@ func apiHandler(w http.ResponseWriter, req *http.Request) {
 	w.Write([]byte(apiResponse))
 }
 
-func visualHandler(w http.ResponseWriter, req *http.Request) {
-	log.DebugR(req, "redirecting visual.ons.gov.uk", log.Data{
+func visualAssetHandler(w http.ResponseWriter, req *http.Request) {
+	dest := "https://static.ons.gov.uk/visual/" + mux.Vars(req)["uri"]
+	log.DebugR(req, "redirecting visual.ons.gov.uk wp-content", log.Data{
 		"host": req.Host,
 		"path": req.URL.Path,
+		"dest": dest,
 	})
+	w.Header().Set("Location", dest)
+	w.WriteHeader(redir)
+}
+
+func visualArticleHandler(w http.ResponseWriter, req *http.Request) {
+	article := mux.Vars(req)["article"]
+	uri := mux.Vars(req)["uri"]
+	log.DebugR(req, "redirecting visual.ons.gov.uk", log.Data{
+		"article": article,
+		"uri":     uri,
+		"host":    req.Host,
+		"path":    req.URL.Path,
+	})
+
+	if dest, ok := visualRedirects[article]; ok {
+		w.Header().Set("Location", dest)
+		w.WriteHeader(redir)
+		return
+	}
+
+	// FIXME
 	w.WriteHeader(410)
-	w.Write([]byte("FIXME"))
+	w.Write([]byte(visualResponse))
 }
