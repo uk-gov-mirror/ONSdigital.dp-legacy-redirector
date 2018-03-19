@@ -47,7 +47,7 @@ func getRouter() *mux.Router {
 	router.Host("web.ons.gov.uk").Path("/ons/api/{uri:.*}").HandlerFunc(apiHandler)
 	router.Host("data.ons.gov.uk").Path("/{uri:.*}").HandlerFunc(apiHandler)
 	// Visual.ONS
-	router.Host("visual.ons.gov.uk").Path("/wp-content/{uri:.*}").HandlerFunc(visualAssetHandler)
+	router.Host("visual.ons.gov.uk").Path("/wp-content/uploads/{uri:.*}").HandlerFunc(visualAssetHandler)
 	router.Host("visual.ons.gov.uk").Path("/{article:[^/]*}{uri:/?.*}").HandlerFunc(visualArticleHandler)
 	// Catch-all
 	router.Path("/{uri:.*}").HandlerFunc(defaultHandler)
@@ -112,7 +112,6 @@ func visualArticleHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// FIXME
-	w.WriteHeader(410)
-	w.Write([]byte(visualResponse))
+	w.Header().Set("Location", "http://webarchive.nationalarchives.gov.uk/20171102124620/https://visual.ons.gov.uk/"+article+uri)
+	w.WriteHeader(redir)
 }

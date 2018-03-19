@@ -30,9 +30,9 @@ var tests = []urlTest{
 	{"https://neighbourhood.statistics.gov.uk/HTMLDocs/a/b/c", redir, "", "https://www.ons.gov.uk/visualisations/nesscontent/a/b/c"},
 	{"https://www.neighbourhood.statistics.gov.uk/HTMLDocs/a/b/c", redir, "", "https://www.ons.gov.uk/visualisations/nesscontent/a/b/c"},
 	// visual.ons.gov.uk migration
-	{"https://visual.ons.gov.uk/a/b/c", 410, "The article you have requested is no longer available.", ""},
+	{"https://visual.ons.gov.uk/a/b/c", redir, "", "http://webarchive.nationalarchives.gov.uk/20171102124620/https://visual.ons.gov.uk/a/b/c"},
 	{"https://visual.ons.gov.uk/how-long-will-my-pension-need-to-last", redir, "", "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/articles/howlongwillmypensionneedtolast/2015-03-27"},
-	{"https://visual.ons.gov.uk/wp-content/a/b/c", redir, "", "https://static.ons.gov.uk/visual/a/b/c"},
+	{"https://visual.ons.gov.uk/wp-content/uploads/a/b/c", redir, "", "https://static.ons.gov.uk/visual/a/b/c"},
 }
 
 func TestRedirects(t *testing.T) {
