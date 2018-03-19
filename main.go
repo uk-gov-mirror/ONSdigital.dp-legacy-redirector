@@ -99,19 +99,26 @@ func visualAssetHandler(w http.ResponseWriter, req *http.Request) {
 func visualArticleHandler(w http.ResponseWriter, req *http.Request) {
 	article := mux.Vars(req)["article"]
 	uri := mux.Vars(req)["uri"]
-	log.DebugR(req, "redirecting visual.ons.gov.uk", log.Data{
-		"article": article,
-		"uri":     uri,
-		"host":    req.Host,
-		"path":    req.URL.Path,
-	})
 
 	if dest, ok := visualRedirects[article]; ok {
+		log.DebugR(req, "redirecting visual request to ONS", log.Data{
+			"article": article,
+			"uri":     uri,
+			"host":    req.Host,
+			"path":    req.URL.Path,
+		})
+
 		w.Header().Set("Location", dest)
 		w.WriteHeader(redir)
 		return
 	}
 
+	log.DebugR(req, "redirecting visual request to national archives", log.Data{
+		"article": article,
+		"uri":     uri,
+		"host":    req.Host,
+		"path":    req.URL.Path,
+	})
 	w.Header().Set("Location", "http://webarchive.nationalarchives.gov.uk/20171102124620/https://visual.ons.gov.uk/"+article+uri)
 	w.WriteHeader(redir)
 }
