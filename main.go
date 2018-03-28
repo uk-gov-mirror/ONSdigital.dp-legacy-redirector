@@ -100,6 +100,19 @@ func visualArticleHandler(w http.ResponseWriter, req *http.Request) {
 	article := mux.Vars(req)["article"]
 	uri := mux.Vars(req)["uri"]
 
+	if len(article) == 0 {
+		log.DebugR(req, "redirecting visual request to ONS", log.Data{
+			"article": article,
+			"uri":     uri,
+			"host":    req.Host,
+			"path":    req.URL.Path,
+		})
+
+		w.Header().Set("Location", "https://www.ons.gov.uk")
+		w.WriteHeader(redir)
+		return
+	}
+
 	if dest, ok := visualRedirects[article]; ok {
 		log.DebugR(req, "redirecting visual request to ONS", log.Data{
 			"article": article,

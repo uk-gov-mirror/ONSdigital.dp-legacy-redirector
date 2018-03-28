@@ -33,6 +33,7 @@ var tests = []urlTest{
 	{"https://visual.ons.gov.uk/a/b/c", redir, "", "http://webarchive.nationalarchives.gov.uk/20171102124620/https://visual.ons.gov.uk/a/b/c"},
 	{"https://visual.ons.gov.uk/how-long-will-my-pension-need-to-last", redir, "", "https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/lifeexpectancies/articles/howlongwillmypensionneedtolast/2015-03-27"},
 	{"https://visual.ons.gov.uk/wp-content/uploads/a/b/c", redir, "", "https://static.ons.gov.uk/visual/a/b/c"},
+	{"https://visual.ons.gov.uk/", redir, "", "https://www.ons.gov.uk"},
 }
 
 func TestRedirects(t *testing.T) {

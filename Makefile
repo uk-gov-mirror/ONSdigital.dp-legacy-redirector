@@ -1,4 +1,4 @@
-VERSION=1.1.1
+VERSION=1.1.2
 
 build:
 	GOOS=linux GOARCH=amd64 go build -o build/dp-legacy-redirector .
