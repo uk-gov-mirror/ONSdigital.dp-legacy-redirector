@@ -1,0 +1,14 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: golang
+    tag: 1.13.9
+
+inputs:
+  - name: dp-legacy-redirector
+
+run:
+  path: dp-legacy-redirector/ci/scripts/unit.sh
