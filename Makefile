@@ -18,3 +18,7 @@ debug:
 .PHONY: test
 test:
 	go test -race -cover ./...
+
+.PHONY: audit
+audit:
+	nancy go.sum
