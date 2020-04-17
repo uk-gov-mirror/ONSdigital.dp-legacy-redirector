@@ -1,13 +1,24 @@
-VERSION=1.1.3
+BUILD=build
+BIN_DIR?=.
 
+BUILD_TIME=$(shell date +%s)
+GIT_COMMIT=$(shell git rev-parse HEAD)
+VERSION ?= $(shell git tag --points-at HEAD | grep ^v | head -n 1)
+LDFLAGS=-ldflags "-X main.BuildTime=$(BUILD_TIME) -X main.GitCommit=$(GIT_COMMIT) -X main.Version=$(VERSION)"
+
+.PHONY: build
 build:
-	GOOS=linux GOARCH=amd64 go build -o build/dp-legacy-redirector .
+	@mkdir -p $(BUILD)/$(BIN_DIR)
+	go build $(LDFLAGS) -o $(BUILD)/$(BIN_DIR)/dp-legacy-redirector .
 
-docker: build
-	curl -o ca-certificates.crt https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt
-	docker build -t onsdigital/dp-legacy-redirector:$(VERSION) .
+.PHONY: debug
+debug:
+	go run -race $(LDFLAGS) .
 
-release: build
-	zip dp-legacy-redirector-$(VERSION).zip build/dp-legacy-redirector Dockerfile ca-certificates.crt
+.PHONY: test
+test:
+	go test -race -cover ./...
 
-.PHONY: build docker
+.PHONY: audit
+audit:
+	nancy go.sum
