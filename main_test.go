@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
+	"github.com/ONSdigital/dp-healthcheck/healthcheck"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -37,7 +39,9 @@ var tests = []urlTest{
 }
 
 func TestRedirects(t *testing.T) {
-	router := getRouter()
+	versionInfo, _ := healthcheck.NewVersionInfo("", "", "")
+	hc := healthcheck.New(versionInfo, time.Second*10, time.Minute)
+	router := getRouter(hc)
 
 	for _, test := range tests {
 		Convey(fmt.Sprintf("%s", test.url), t, func() {

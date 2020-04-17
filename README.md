@@ -19,12 +19,14 @@ To build for release:
 
 Configuration for the redirector.
 
-| Environment variable | Default | Description
-| -------------------- | ------- | -----------
-| BIND_ADDR            | :8080   | The host and port to bind to
+| Environment variable         | Default | Description                                   |
+| ---------------------------- | ------- | --------------------------------------------- |
+| BIND_ADDR                    | :24600  | The host and port to bind to                  |
+| HEALTHCHECK_INTERVAL         | 60s     | The period of time between health checks      |
+| HEALTHCHECK_CRITICAL_TIMEOUT | 5s      | The period of time after which failing checks |
 
 ### License
 
-Copyright ©‎ 2017, Office for National Statistics (https://www.ons.gov.uk)
+Copyright ©‎ 2017-2020, Office for National Statistics (https://www.ons.gov.uk)
 
 Released under MIT license, see [LICENSE](LICENSE.md) for details.
