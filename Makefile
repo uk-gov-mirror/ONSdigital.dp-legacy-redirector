@@ -21,4 +21,4 @@ test:
 
 .PHONY: audit
 audit:
-	nancy go.sum
+	go list -json -m all | nancy sleuth
