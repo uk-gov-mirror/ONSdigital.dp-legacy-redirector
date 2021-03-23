@@ -9,6 +9,7 @@ image_resource:
 
 inputs:
   - name: dp-legacy-redirector
+    path: dp-legacy-redirector
 
 run:
   path: dp-legacy-redirector/ci/scripts/audit.sh
