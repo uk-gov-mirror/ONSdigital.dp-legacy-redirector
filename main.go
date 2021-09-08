@@ -8,7 +8,7 @@ import (
 	"github.com/ONSdigital/dp-healthcheck/healthcheck"
 	"github.com/ONSdigital/dp-legacy-redirector/config"
 	"github.com/ONSdigital/go-ns/server"
-	"github.com/ONSdigital/log.go/log"
+	"github.com/ONSdigital/log.go/v2/log"
 	"github.com/gorilla/mux"
 )
 
@@ -32,25 +32,25 @@ func main() {
 
 	cfg, err := config.Get()
 	if err != nil {
-		log.Event(nil, "unable to retrieve service configuration", log.FATAL, log.Error(err))
+		log.Fatal(ctx, "unable to retrieve service configuration", err)
 		os.Exit(1)
 	}
 
-	log.Event(ctx, "config on startup", log.INFO, log.Data{"config": cfg, "build_time": BuildTime, "git-commit": GitCommit})
+	log.Info(ctx, "config on startup", log.Data{"config": cfg, "build_time": BuildTime, "git-commit": GitCommit})
 
 	// Health check
 	versionInfo, err := healthcheck.NewVersionInfo(BuildTime, GitCommit, Version)
 	if err != nil {
-		log.Event(ctx, "Failed to obtain VersionInfo for healthcheck", log.FATAL, log.Error(err))
+		log.Fatal(ctx, "Failed to obtain VersionInfo for healthcheck", err)
 		os.Exit(1)
 	}
 	hc := healthcheck.New(versionInfo, cfg.HealthckeckCriticalTimeout, cfg.HealthckeckInterval)
 
 	srv := server.New(cfg.BindAddr, getRouter(hc))
 
-	log.Event(ctx, "starting http server", log.INFO, log.Data{"bind_addr": cfg.BindAddr})
+	log.Info(ctx, "starting http server", log.Data{"bind_addr": cfg.BindAddr})
 	if err := srv.ListenAndServe(); err != nil {
-		log.Event(ctx, "error starting server", log.FATAL, log.Error(err))
+		log.Fatal(ctx, "error starting server", err)
 		os.Exit(1)
 	}
 }
@@ -83,7 +83,7 @@ func getRouter(hc healthcheck.HealthCheck) *mux.Router {
 }
 
 func defaultHandler(w http.ResponseWriter, req *http.Request) {
-	log.Event(req.Context(), "redirecting to landing page", log.INFO, log.Data{
+	log.Info(req.Context(), "redirecting to landing page", log.Data{
 		"host": req.Host,
 		"path": req.URL.Path,
 		"dest": landingPage,
@@ -94,7 +94,7 @@ func defaultHandler(w http.ResponseWriter, req *http.Request) {
 
 func dataVisHandler(w http.ResponseWriter, req *http.Request) {
 	dest := "https://www.ons.gov.uk/visualisations/nesscontent/" + mux.Vars(req)["uri"]
-	log.Event(req.Context(), "redirecting visualisation", log.INFO, log.Data{
+	log.Info(req.Context(), "redirecting visualisation", log.Data{
 		"host": req.Host,
 		"path": req.URL.Path,
 		"dest": dest,
@@ -104,7 +104,7 @@ func dataVisHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func apiHandler(w http.ResponseWriter, req *http.Request) {
-	log.Event(req.Context(), "returning api help text", log.INFO, log.Data{
+	log.Info(req.Context(), "returning api help text", log.Data{
 		"host": req.Host,
 		"path": req.URL.Path,
 	})
@@ -114,7 +114,7 @@ func apiHandler(w http.ResponseWriter, req *http.Request) {
 
 func visualAssetHandler(w http.ResponseWriter, req *http.Request) {
 	dest := "https://static.ons.gov.uk/visual/" + mux.Vars(req)["uri"]
-	log.Event(req.Context(), "redirecting visual.ons.gov.uk wp-content", log.INFO, log.Data{
+	log.Info(req.Context(), "redirecting visual.ons.gov.uk wp-content", log.Data{
 		"host": req.Host,
 		"path": req.URL.Path,
 		"dest": dest,
@@ -128,7 +128,7 @@ func visualArticleHandler(w http.ResponseWriter, req *http.Request) {
 	uri := mux.Vars(req)["uri"]
 
 	if len(article) == 0 {
-		log.Event(req.Context(), "redirecting visual request to ONS", log.INFO, log.Data{
+		log.Info(req.Context(), "redirecting visual request to ONS", log.Data{
 			"article": article,
 			"uri":     uri,
 			"host":    req.Host,
@@ -141,7 +141,7 @@ func visualArticleHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if dest, ok := visualRedirects[article]; ok {
-		log.Event(req.Context(), "redirecting visual request to ONS", log.INFO, log.Data{
+		log.Info(req.Context(), "redirecting visual request to ONS", log.Data{
 			"article": article,
 			"uri":     uri,
 			"host":    req.Host,
@@ -153,7 +153,7 @@ func visualArticleHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	log.Event(req.Context(), "redirecting visual request to national archives", log.INFO, log.Data{
+	log.Info(req.Context(), "redirecting visual request to national archives", log.Data{
 		"article": article,
 		"uri":     uri,
 		"host":    req.Host,
