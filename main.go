@@ -15,7 +15,6 @@ import (
 var redir = http.StatusTemporaryRedirect
 var landingPage = "https://www.ons.gov.uk/help/localstatistics"
 var apiResponse = "This service is no longer available. Please visit https://www.ons.gov.uk/help/localstatistics for more information."
-var visualResponse = "The article you have requested is no longer available."
 
 var (
 	// BuildTime represents the time in which the service was built
@@ -109,7 +108,10 @@ func apiHandler(w http.ResponseWriter, req *http.Request) {
 		"path": req.URL.Path,
 	})
 	w.WriteHeader(410)
-	w.Write([]byte(apiResponse))
+	_, err := w.Write([]byte(apiResponse))
+	if err != nil {
+		log.Error(req.Context(), "error writing response", err)
+	}
 }
 
 func visualAssetHandler(w http.ResponseWriter, req *http.Request) {

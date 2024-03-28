@@ -1,0 +1,15 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: golang
+    tag: 1.22.1-bullseye
+
+inputs:
+  - name: dp-legacy-redirector
+
+run:
+  path: dp-legacy-redirector/ci/scripts/lint.sh

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -44,7 +43,7 @@ func TestRedirects(t *testing.T) {
 	router := getRouter(hc)
 
 	for _, test := range tests {
-		Convey(fmt.Sprintf("%s", test.url), t, func() {
+		Convey(test.url, t, func() {
 			w := httptest.NewRecorder()
 			req, err := http.NewRequest("GET", test.url, nil)
 			So(err, ShouldBeNil)
