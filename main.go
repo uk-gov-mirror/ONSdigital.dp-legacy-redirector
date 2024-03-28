@@ -7,7 +7,7 @@ import (
 
 	"github.com/ONSdigital/dp-healthcheck/healthcheck"
 	"github.com/ONSdigital/dp-legacy-redirector/config"
-	"github.com/ONSdigital/go-ns/server"
+	server "github.com/ONSdigital/dp-net/v2/http"
 	"github.com/ONSdigital/log.go/v2/log"
 	"github.com/gorilla/mux"
 )
@@ -45,7 +45,7 @@ func main() {
 	}
 	hc := healthcheck.New(versionInfo, cfg.HealthckeckCriticalTimeout, cfg.HealthckeckInterval)
 
-	srv := server.New(cfg.BindAddr, getRouter(hc))
+	srv := server.NewServer(cfg.BindAddr, getRouter(hc))
 
 	log.Info(ctx, "starting http server", log.Data{"bind_addr": cfg.BindAddr})
 	if err := srv.ListenAndServe(); err != nil {

@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/ONSdigital/dp-healthcheck v1.6.3
-	github.com/ONSdigital/go-ns v0.0.0-20210916104633-ac1c1c52327e
+	github.com/ONSdigital/dp-net/v2 v2.11.2
 	github.com/ONSdigital/log.go/v2 v2.4.3
 	github.com/gorilla/mux v1.8.1
 	github.com/kelseyhightower/envconfig v1.4.0
@@ -13,7 +13,6 @@ require (
 
 require (
 	github.com/ONSdigital/dp-api-clients-go/v2 v2.260.0 // indirect
-	github.com/ONSdigital/dp-net/v2 v2.11.2 // indirect
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
@@ -27,5 +26,6 @@ require (
 	go.opentelemetry.io/otel v1.24.0 // indirect
 	go.opentelemetry.io/otel/metric v1.24.0 // indirect
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
+	golang.org/x/net v0.20.0 // indirect
 	golang.org/x/sys v0.18.0 // indirect
 )
