@@ -20,7 +20,7 @@ debug:
 
 .PHONY: lint
 lint:
-	golangci-lint run ./... --timeout 3m --tests=false --skip-dirs=features
+	golangci-lint run ./...
 
 .PHONY: test
 test:
