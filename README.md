@@ -1,10 +1,9 @@
-dp-legacy-redirector
-====================
+# dp-legacy-redirector
 
 Handles redirects for legacy ONS services including Neighbourhood Statistics, Web Data Access
 and Visual.ONS.
 
-### Getting started
+## Getting started
 
 To run locally:
 
@@ -15,7 +14,7 @@ To build for release:
 
 * `make docker`
 
-### Configuration
+## Configuration
 
 Configuration for the redirector.
 
@@ -25,8 +24,8 @@ Configuration for the redirector.
 | HEALTHCHECK_INTERVAL         | 60s     | The period of time between health checks      |
 | HEALTHCHECK_CRITICAL_TIMEOUT | 5s      | The period of time after which failing checks |
 
-### License
+## License
 
-Copyright ©‎ 2017-2020, Office for National Statistics (https://www.ons.gov.uk)
+Copyright ©‎ 2017-2025, Office for National Statistics (https://www.ons.gov.uk)
 
 Released under MIT license, see [LICENSE](LICENSE.md) for details.
