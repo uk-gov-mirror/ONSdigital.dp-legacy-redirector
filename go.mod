@@ -1,3 +1,4 @@
+// Deprecated: This repository was archived in September 2025 as it is no longer in development
 module github.com/ONSdigital/dp-legacy-redirector
 
 go 1.23

@@ -1,5 +1,7 @@
 # dp-legacy-redirector
 
+⚠️ This repository was be archived in September 2025 is no longer in development. ⚠️
+
 Handles redirects for legacy ONS services including Neighbourhood Statistics, Web Data Access
 and Visual.ONS.
 
